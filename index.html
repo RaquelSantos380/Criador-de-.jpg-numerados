@@ -15,12 +15,18 @@
         #downloadLinks {
             margin-top: 20px;
         }
+        button {
+            margin: 10px 0;
+        }
     </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
 </head>
 <body>
     <h1>Upload de Imagens</h1>
     <input type="file" id="fileInput" accept="image/*" multiple>
     <button id="uploadButton">Enviar Imagens</button>
+    <button id="downloadAllButton" style="display: none;">Baixar Todas as Imagens</button>
     <div id="downloadLinks"></div>
 
     <script>
@@ -50,6 +56,25 @@
 
                 reader.readAsDataURL(file);
             }
+
+            // Exibir o botão de download de todas as imagens
+            document.getElementById('downloadAllButton').style.display = 'block';
+        });
+
+        document.getElementById('downloadAllButton').addEventListener('click', function() {
+            const fileInput = document.getElementById('fileInput');
+            const files = fileInput.files;
+            const zip = new JSZip();
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                zip.file(`${i + 1}.jpg`, file);
+            }
+
+            zip.generateAsync({ type: "blob" })
+                .then(function(content) {
+                    saveAs(content, "imagens.zip");
+                });
         });
     </script>
 </body>
