@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Upload de Imagens</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        input[type="file"] {
+            margin: 10px 0;
+        }
+        #downloadLinks {
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Upload de Imagens</h1>
+    <input type="file" id="fileInput" accept="image/*" multiple>
+    <button id="uploadButton">Enviar Imagens</button>
+    <div id="downloadLinks"></div>
+
+    <script>
+        document.getElementById('uploadButton').addEventListener('click', function() {
+            const fileInput = document.getElementById('fileInput');
+            const files = fileInput.files;
+            const downloadLinksDiv = document.getElementById('downloadLinks');
+            downloadLinksDiv.innerHTML = ''; // Limpar links anteriores
+
+            if (files.length > 13) {
+                alert('Por favor, envie no máximo 13 imagens.');
+                return;
+            }
+
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                const reader = new FileReader();
+
+                reader.onload = function(event) {
+                    const link = document.createElement('a');
+                    link.href = event.target.result;
+                    link.download = `${i + 1}.jpg`; // Renomear como 1.jpg, 2.jpg, etc.
+                    link.textContent = `Baixar ${i + 1}.jpg`;
+                    downloadLinksDiv.appendChild(link);
+                    downloadLinksDiv.appendChild(document.createElement('br'));
+                };
+
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+</body>
+</html>
