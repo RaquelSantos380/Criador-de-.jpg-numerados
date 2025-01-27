@@ -36,8 +36,9 @@
             const downloadLinksDiv = document.getElementById('downloadLinks');
             downloadLinksDiv.innerHTML = ''; // Limpar links anteriores
 
-            if (files.length > 13) {
-                alert('Por favor, envie no máximo 13 imagens.');
+            // Alterado de 13 para 30
+            if (files.length > 30) {
+                alert('Por favor, envie no máximo 30 imagens.');
                 return;
             }
 
