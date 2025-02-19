@@ -36,12 +36,6 @@
             const downloadLinksDiv = document.getElementById('downloadLinks');
             downloadLinksDiv.innerHTML = ''; // Limpar links anteriores
 
-            // Alterado de 13 para 30
-            if (files.length > 30) {
-                alert('Por favor, envie no máximo 30 imagens.');
-                return;
-            }
-
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
                 const reader = new FileReader();
@@ -49,8 +43,8 @@
                 reader.onload = function(event) {
                     const link = document.createElement('a');
                     link.href = event.target.result;
-                    link.download = `${i + 1}.jpg`; // Renomear como 1.jpg, 2.jpg, etc.
-                    link.textContent = `Baixar ${i + 1}.jpg`;
+                    link.download = file.name; // Usar o nome original do arquivo
+                    link.textContent = `Baixar ${file.name}`;
                     downloadLinksDiv.appendChild(link);
                     downloadLinksDiv.appendChild(document.createElement('br'));
                 };
@@ -69,7 +63,7 @@
 
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-                zip.file(`${i + 1}.jpg`, file);
+                zip.file(file.name, file); // Usar o nome original do arquivo
             }
 
             zip.generateAsync({ type: "blob" })
