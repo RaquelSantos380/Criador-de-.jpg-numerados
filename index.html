@@ -40,14 +40,16 @@
                 const file = files[i];
                 const reader = new FileReader();
 
-                reader.onload = function(event) {
-                    const link = document.createElement('a');
-                    link.href = event.target.result;
-                    link.download = file.name; // Usar o nome original do arquivo
-                    link.textContent = `Baixar ${file.name}`;
-                    downloadLinksDiv.appendChild(link);
-                    downloadLinksDiv.appendChild(document.createElement('br'));
-                };
+                reader.onload = (function(index) {
+                    return function(event) {
+                        const link = document.createElement('a');
+                        link.href = event.target.result;
+                        link.download = (index + 1) + '.jpg'; // Nomear os arquivos sequencialmente
+                        link.textContent = `Baixar ${(index + 1)}.jpg`;
+                        downloadLinksDiv.appendChild(link);
+                        downloadLinksDiv.appendChild(document.createElement('br'));
+                    };
+                })(i);
 
                 reader.readAsDataURL(file);
             }
@@ -63,7 +65,8 @@
 
             for (let i = 0; i < files.length; i++) {
                 const file = files[i];
-                zip.file(file.name, file); // Usar o nome original do arquivo
+                // Nomear os arquivos sequencialmente na zipagem
+                zip.file((i + 1) + '.jpg', file);
             }
 
             zip.generateAsync({ type: "blob" })
