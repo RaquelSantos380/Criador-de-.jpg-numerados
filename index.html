@@ -103,6 +103,24 @@
             color: #666;
             margin-bottom: 5px;
         }
+        .image-container {
+            margin-bottom: 30px;
+            border-bottom: 1px solid #eee;
+            padding-bottom: 20px;
+        }
+        .image-container img {
+            max-width: 100%;
+            display: block;
+            margin: 10px auto;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+        }
+        .image-number {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            margin: 10px 0;
+        }
     </style>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/FileSaver.js/2.0.5/FileSaver.min.js"></script>
@@ -191,21 +209,37 @@
                             cropSize
                         );
                         
+                        // Criar container para a imagem
+                        const container = document.createElement('div');
+                        container.className = 'image-container';
+                        
+                        // Adicionar número da imagem
+                        const numberDiv = document.createElement('div');
+                        numberDiv.className = 'image-number';
+                        numberDiv.textContent = `Imagem ${index + 1}`;
+                        container.appendChild(numberDiv);
+                        
+                        // Adicionar imagem recortada
+                        const imgElement = document.createElement('img');
+                        imgElement.src = canvas.toDataURL('image/jpeg');
+                        imgElement.alt = `Imagem recortada ${index + 1}`;
+                        container.appendChild(imgElement);
+                        
                         // Criar link de download
                         const link = document.createElement('a');
                         link.href = canvas.toDataURL('image/jpeg');
                         link.download = (index + 1) + '.jpg';
                         link.className = 'download-link';
                         link.textContent = `Baixar ${(index + 1)}.jpg`;
+                        container.appendChild(link);
                         
                         // Adicionar informações
                         const info = document.createElement('div');
                         info.className = 'file-info';
                         info.textContent = `Recorte: ${cropSize}×${cropSize}px | Origem: →${offsetX}px ↓${offsetY}px | Original: ${img.width}×${img.height}px`;
+                        container.appendChild(info);
                         
-                        resultsDiv.appendChild(link);
-                        resultsDiv.appendChild(info);
-                        resultsDiv.appendChild(document.createElement('br'));
+                        resultsDiv.appendChild(container);
                     };
                     img.onerror = function() {
                         const errorMsg = document.createElement('div');
